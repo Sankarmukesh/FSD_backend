@@ -6,7 +6,7 @@ const options = {
         info: {
             title: 'Beync Backend',
             version: '1.0.0',
-            description: 'API documentation for Beyinc backend',
+            description: 'API documentation for FSD By Sankar',
         },
     },
     apis: ['./routes/*.js'], // Path to your API routes
