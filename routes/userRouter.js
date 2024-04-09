@@ -4,6 +4,9 @@ const userController = require("../controllers/userController");
 
 router.route("/getUser").post(userController.getProfile);
 
+router.route("/updateUserRole").post(userController.updateUserRole);
+
+
 router.route("/getUsers").post(userController.getUsers);
 
 router.route("/verifyUserPassword").post(userController.verifyUserPassword);

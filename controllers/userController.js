@@ -25,6 +25,23 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+exports.updateUserRole = async(req, res) => {
+  try {
+    const { id, role  } = req.body;
+    const userDoesExist = await User.findOne(
+      { _id: id }
+    );
+
+    if (userDoesExist) {
+      await User.updateOne({ _id: id }, { $set: { role: role } })
+      return res.status(200).json(userDoesExist);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 exports.verifyUserPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -166,7 +183,7 @@ exports.getUsers = async (req, res) => {
       );
       return res.status(200).json(result);
     } else {
-      let result = await User.find({}, { password: 0 });
+      let result = await User.find({ role: { $ne: 'Admin' } }, { password: 0 });
       return res.status(200).json(result);
     }
   } catch (err) {

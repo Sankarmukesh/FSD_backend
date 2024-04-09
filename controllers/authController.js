@@ -1,5 +1,5 @@
 const { authSchema } = require("../helpers/validations");
-const nodemailer = require("nodemailer");
+const passport = require('passport')
 const bcrypt = require("bcrypt");
 const {
   signAccessToken,
@@ -15,6 +15,31 @@ const Userverify = require("../models/OtpModel");
 dotenv.config({ path: "../config.env" });
 const twilio = require("twilio");
 const send_mail = require("../helpers/EmailSending");
+
+const GoogleStrategy = require('passport-google-oauth2').Strategy
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/auth/google/callback',
+  scope: ["profile", "email"]
+},
+  function (request, accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    callbackPromise(null, profile)
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+  }
+));
+
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
+
 
 exports.register = async (req, res, next) => {
   try {
@@ -119,6 +144,8 @@ exports.googleSSORegister = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 exports.login = async (req, res, next) => {
   try {
