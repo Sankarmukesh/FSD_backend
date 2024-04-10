@@ -11,7 +11,7 @@ exports.addtaskComment = async (req, res, next) => {
             path: "commentBy",
             select: ["userName", "image", "role"],
         })
-        return res.status(200).json(addedComment);
+        return res.status(200).json(updatedComment);
     } catch (err) {
         return res.status(400).json(err);
     }
