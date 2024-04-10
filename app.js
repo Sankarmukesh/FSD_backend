@@ -7,6 +7,10 @@ const cookiesession = require('cookie-session')
 const rolerouter = require("./routes/rolesRouter");
 const projectrouter = require("./routes/projectRouter");
 const userStoryRouter = require("./routes/userStoryRouter");
+const userStoryCommentRouter = require("./routes/userStoryComment");
+const taskCommentRouter = require("./routes/taskComments");
+
+
 const TaskRouter = require("./routes/TaskRouter");
 
 
@@ -38,6 +42,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/userDetails", verifyAccessToken, userRouter);
 app.use("/api/projectDetails", verifyAccessToken, projectrouter);
 app.use("/api/userStoryDetails", verifyAccessToken, userStoryRouter);
+app.use("/api/userStoryCommentDetails", verifyAccessToken, userStoryCommentRouter);
+app.use("/api/taskCommentDetails", verifyAccessToken, taskCommentRouter);
+
+
 app.use("/api/taskdetails", verifyAccessToken, TaskRouter);
 
 

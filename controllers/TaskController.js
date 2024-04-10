@@ -1,10 +1,11 @@
 
 const Tasks = require("../models/Tasks")
+const UserStories = require("../models/UserStories")
 
 
 exports.getAllTasks = async (req, res, next) => {
     try {
-        const tasks = await Tasks.find({})
+        const tasks = await Tasks.find({}).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] })
         return res.status(200).send(tasks)
 
     } catch (err) {
@@ -15,7 +16,7 @@ exports.getAllTasks = async (req, res, next) => {
 
 exports.getSingleTask = async (req, res, next) => {
     try {
-        const tasks = await Tasks.findOne({_id: req.body.taskId})
+        const tasks = await Tasks.findOne({ _id: req.body.taskId }).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] })
         return res.status(200).send(tasks)
 
     } catch (err) {
@@ -32,8 +33,12 @@ exports.addTask = async (req, res, next) => {
         if (tasksExists) {
             return res.status(400).json({ message: 'Tasks Name already exists' })
         }
-        await Tasks.create({ projectId: projectId, userStoryId: userStoryId, name: name, description, owner, createdBy: user_id, status: 'New', due })
-        return res.status(200).send('Project Added')
+        const addedTask = await Tasks.create({ projectId: projectId, userStoryId: userStoryId, name: name, description, owner, createdBy: user_id, status: 'New', due, lastUpdatedBy: user_id })
+        const userStory = await UserStories.findOne({ _id: userStoryId })
+        userStory.taskIds.push(addedTask._id.toString())
+        userStory.save()
+        const fetchingNewTask = await Tasks.findOne({ _id: addedTask._id }).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] })
+        return res.status(200).json(fetchingNewTask)
     } catch (err) {
         return res.status(400).send(err)
 
