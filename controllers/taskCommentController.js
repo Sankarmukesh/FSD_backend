@@ -24,7 +24,7 @@ exports.gettaskComment = async (req, res, next) => {
         const comments = await TaskDiscussion.find({ taskId: taskId }).populate({
             path: "commentBy",
             select: ["userName", "image", "role"],
-        })
+        }).sort({ createdAt: -1 });
         return res.status(200).json(comments);
     } catch (err) {
         return res.status(400).json(err);

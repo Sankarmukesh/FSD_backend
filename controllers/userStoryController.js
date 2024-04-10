@@ -10,7 +10,7 @@ exports.getUserStoryBasedOnProject = async (req, res, next) => {
                 path: 'owner', // Path to populate within each task object
                 select: ["userName", "_id", 'email', 'image'] // Fields to select from the owner object
             }, 
-})
+        }).sort({ createdAt: -1 });
         return res.status(200).send(userStories)
     } catch (err) {
         return res.status(400).send(err)

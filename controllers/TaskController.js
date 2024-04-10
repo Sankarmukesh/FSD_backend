@@ -35,7 +35,7 @@ exports.addTask = async (req, res, next) => {
         }
         const addedTask = await Tasks.create({ projectId: projectId, userStoryId: userStoryId, name: name, description, owner, createdBy: user_id, status: 'New', due, lastUpdatedBy: user_id })
         const userStory = await UserStories.findOne({ _id: userStoryId })
-        userStory.taskIds.push(addedTask._id.toString())
+        userStory.taskIds.unshift(addedTask._id.toString())
         userStory.save()
         const fetchingNewTask = await Tasks.findOne({ _id: addedTask._id }).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] })
         return res.status(200).json(fetchingNewTask)
