@@ -49,11 +49,11 @@ exports.addTask = async (req, res, next) => {
 exports.updateTask = async (req, res, next) => {
     try {
         const { taskId, owner, due, name, description, status, updatedBy } = req.body
-        const taskExist = await UserStories.findOne({ _id: taskId })
+        const taskExist = await Tasks.findOne({ _id: taskId })
         if (!taskExist) {
             return res.status(400).json({ message: 'Task not exists' })
         }
-        await UserStories.updateOne({ _id: taskId }, { $set: { owner: owner, name: name, description: description, status: status, lastUpdatedBy: updatedBy, due: due } })
+        await Tasks.updateOne({ _id: taskId }, { $set: { owner: owner, name: name, description: description, status: status, lastUpdatedBy: updatedBy, due: due } })
         return res.status(200).send('userstory updated')
     } catch (err) {
         return res.status(400).send(err)
