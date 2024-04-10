@@ -7,6 +7,10 @@ exports.addtaskComment = async (req, res, next) => {
     try {
         const { taskId, comment, commentBy } = req.body
         const addedComment = await TaskDiscussion.create({ comment: comment, commentBy: commentBy, taskId: taskId })
+        const updatedComment = await TaskDiscussion.findOne({ _id: addedComment._id }).populate({
+            path: "commentBy",
+            select: ["userName", "image", "role"],
+        })
         return res.status(200).json(addedComment);
     } catch (err) {
         return res.status(400).json(err);
