@@ -71,7 +71,7 @@ exports.addProject = async (req, res, next) => {
 
 exports.updateProject = async (req, res, next) => {
     try {
-        const { projectId, name, teamMembers, sendingEmail } = req.body
+        const { projectId, name, teamMembers, sendingEmail, deletingEmail } = req.body
         const projectExist = await Projects.findOne({ _id: projectId })
         if (!projectExist) {
             return res.status(400).json({ message: 'Project not exists' })
