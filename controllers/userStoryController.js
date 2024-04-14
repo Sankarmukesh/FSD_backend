@@ -51,7 +51,7 @@ exports.addUserStory = async (req, res, next) => {
             },
         })
         const projectDetails = await Project.findOne({ _id: projectId})
-        await send_mail(result.owner.email, 'Assigned a user story!', `Hi ${result.owner.userName}, a user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`)
+        await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`)
         return res.status(200).json(result)
     } catch (err) {
         return res.status(400).send(err)
@@ -67,6 +67,13 @@ exports.updateOwnerForUserStory = async (req, res, next) => {
         if (!userStoryExists) {
             return res.status(400).json({ message: 'UserStories not exists' })
         }
+        const beforeUpdateUserStory = await UserStories.findOne({ _id: userStoryid }).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] }).populate({
+            path: 'taskIds', select: ["name", "projectId", "createdBy", 'description', 'due', 'owner', 'status', 'updatedAt', 'lastUpdatedBy'], populate: {
+                path: 'owner', // Path to populate within each task object
+                select: ["userName", "_id", 'email', 'image'] // Fields to select from the owner object
+            },
+        })
+
         await UserStories.updateOne({ _id: userStoryid }, { $set: { owner: owner, name: name, description: description, status: status, lastUpdatedBy: updatedBy } })
         const result = await UserStories.findOne({ _id: userStoryid }).populate({ path: 'lastUpdatedBy', select: ["userName", "_id", 'email', 'image'] }).populate({ path: 'owner', select: ["userName", "_id", 'email', 'image'] }).populate({
             path: 'taskIds', select: ["name", "projectId", "createdBy", 'description', 'due', 'owner', 'status', 'updatedAt', 'lastUpdatedBy'], populate: {
@@ -76,7 +83,11 @@ exports.updateOwnerForUserStory = async (req, res, next) => {
         })
         
         const projectDetails = await Project.findOne({ _id: result.projectId })
-        await send_mail(result.owner.email, 'Updates on your user Story!', `Hi ${result.owner.userName}, user story <b>${result.name}</b> has been updated in project <b>${projectDetails.name}</b>`)
+        if (beforeUpdateUserStory?.owner?._id.toString() !== result?.owner?._id.toString()) {
+            await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`)
+        } else {
+            await send_mail(result.owner.email, 'Updates on your user Story!', `A user story <b>${result.name}</b> has been updated in project <b>${projectDetails.name}</b>`)
+        }
 
         return res.status(200).json(result)
     } catch (err) {

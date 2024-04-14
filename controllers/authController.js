@@ -106,7 +106,7 @@ exports.googleSSORegister = async (req, res, next) => {
       // hashing password
       const salt = await bcrypt.genSalt(10);
       const passwordHashing = await bcrypt.hash(
-        `${userName}@FSD1`,
+        `${userName}@TFE1`,
         salt
       );
       const newUser = await User.create({
@@ -123,7 +123,7 @@ exports.googleSSORegister = async (req, res, next) => {
         { email: email, user_id: newUser._id },
         `${newUser._id}`
       );
-      await send_mail(email, 'FSD System generated password for you', `Hey Hi ${userName} your temporary password is <b>${userName}@FSD1</b>. If you want to change password please logout and change that in forgot password page`)
+      await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName}@TFE1</b>. If you want to change password please logout and change that in forgot password page`)
 
       return res.send({ accessToken: accessToken, refreshToken: refreshToken });
     }
