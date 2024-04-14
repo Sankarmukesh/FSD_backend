@@ -41,11 +41,11 @@ exports.getsingleProject = async (req, res, next) => {
 }
 
 const sendProjectEmail = async (email, userName, name) => {
-    await send_mail(email, 'Assigning a new project !', `Hey Hi ${userName} a new project ${name} has been assigned to you`)
+    await send_mail(email, 'Assigning a new project !', `A new project <b>${name}</b> has been assigned to you by admin.`)
 }
 
 const deletingProjectEmail = async (email, userName, name) => {
-    await send_mail(email, 'Removing from project !', `Hey Hi ${userName} you are removed from a project ${name}.`)
+    await send_mail(email, 'Removing from project !', `You are removed from a project <b>${name}</b> by admin.`)
 }
 
 exports.addProject = async (req, res, next) => {
