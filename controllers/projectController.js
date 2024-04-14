@@ -45,7 +45,7 @@ const sendProjectEmail = async (email, userName, name) => {
 }
 
 const deletingProjectEmail = async (email, userName, name) => {
-    await send_mail(email, 'Reemoving from project !', `Hey Hi ${userName} you are removed from a project ${name}.`)
+    await send_mail(email, 'Removing from project !', `Hey Hi ${userName} you are removed from a project ${name}.`)
 }
 
 exports.addProject = async (req, res, next) => {
