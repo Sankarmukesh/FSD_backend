@@ -88,6 +88,7 @@ exports.register = async (req, res, next) => {
       { email: email, user_id: userDetails._id },
       `${userDetails._id}`
     );
+    await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`)
 
     return res.send({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (err) {
@@ -124,6 +125,7 @@ exports.googleSSORegister = async (req, res, next) => {
         `${newUser._id}`
       );
       await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName}@TFE1</b>. If you want to change password please logout and change that in forgot password page`)
+      await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`)
 
       return res.send({ accessToken: accessToken, refreshToken: refreshToken });
     }
