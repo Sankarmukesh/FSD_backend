@@ -5,8 +5,8 @@ const send_mail = require("../helpers/EmailSending")
 
 exports.getAllProjects = async (req, res, next) => {
     try {
-        if (req.payload.role !== 'Admin') {
-            const projects = await Projects.find({ teamMembers: { $in: [req.payload.user_id] } }).populate({
+        if (req.body.role !== 'Admin') {
+            const projects = await Projects.find({ teamMembers: { $in: [req.body.user_id] } }).populate({
                 path: "teamMembers",
                 select: ["userName", "image", "role", "email", "_id"],
             })

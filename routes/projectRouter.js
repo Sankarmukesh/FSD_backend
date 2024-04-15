@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const projectController = require("../controllers/projectController");
 
-router.route('/getAllProjects').get(projectController.getAllProjects)
+router.route('/getAllProjects').post(projectController.getAllProjects)
 router.route('/getsingleProject').get(projectController.getsingleProject)
 
 router.route('/addProject').post(projectController.addProject)
