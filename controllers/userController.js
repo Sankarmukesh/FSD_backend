@@ -9,6 +9,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "../config.env" });
 const cloudinary = require("../helpers/UploadImage");
 
+const send_mail = require("../helpers/EmailSending")
 exports.getProfile = async (req, res) => {
   try {
     const { id } = req.body;
@@ -34,6 +35,7 @@ exports.updateUserRole = async(req, res) => {
 
     if (userDoesExist) {
       await User.updateOne({ _id: id }, { $set: { role: role } })
+      await send_mail(userDoesExist.email, 'Role Updated!', `Your role has been changed to <b>${role}</b> by admin.`)
       return res.status(200).json(userDoesExist);
     }
   } catch (error) {
