@@ -6,6 +6,9 @@ const tasksSchema = new mongoose.Schema(
             type: String,
             unique: true,
         },
+        type: {
+            type: String,
+        },
         projectId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Projects",
