@@ -2,6 +2,7 @@ const Projects = require("../models/Projects")
 const UserStories = require("../models/UserStories")
 const Tasks = require("../models/Tasks")
 const send_mail = require("../helpers/EmailSending")
+const { notificationImage } = require("../helpers/imageDeciders")
 
 exports.getAllProjects = async (req, res, next) => {
     try {
@@ -41,11 +42,11 @@ exports.getsingleProject = async (req, res, next) => {
 }
 
 const sendProjectEmail = async (email, userName, name) => {
-    await send_mail(email, 'Assigning a new project !', `A new project <b>${name}</b> has been assigned to you by admin.`)
+    await send_mail(email, 'Assigning a new project !', `A new project <b>${name}</b> has been assigned to you by admin.`, notificationImage)
 }
 
 const deletingProjectEmail = async (email, userName, name) => {
-    await send_mail(email, 'Removing from project !', `You are removed from a project <b>${name}</b> by admin.`)
+    await send_mail(email, 'Removing from project !', `You are removed from a project <b>${name}</b> by admin.`, notificationImage)
 }
 
 exports.addProject = async (req, res, next) => {

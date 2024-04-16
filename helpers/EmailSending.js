@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const { signEmailOTpToken } = require("./jwt_helpers");
 const Userverify = require("../models/OtpModel");
 dotenv.config({ path: "../config.env" });
-const send_mail = async (to, subject, body, ...args) => {
+const send_mail = async (to, subject, body, mailImage, ...args) => {
   // console.log(args);
   try {
     const transporter = nodemailer.createTransport({
@@ -20,17 +20,32 @@ const send_mail = async (to, subject, body, ...args) => {
       to: to,
       subject: subject,
       html: `
-            <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 8px solid rgba(4, 170, 109, 0.25);">
-            <img src=${process.env.MAIL_LOGO} alt="Email Banner" style="display: block; width: 300px; height: 70px; object-fit: cover;">
-            <p>Hi <b>${to.split('@')[0]}</b></p>
-            <p>${body}</p>
-              <a href = ${process.env.FRONTEND_SITE} style="display: inline-block; padding: 10px 20px; background-color: #04aa6d; color: #fff; text-decoration: none; border-radius: 5px;">Go to Task Forge</a>       
-              <p style="margin-top: 20px;">Best Regards,<br><b>Task Forge By Sankar</b></p>
-              <div style="margin-top: 20px; background-color: #f0f0f0; padding: 10px; border-radius: 5px; text-align: center;">
-                  <p style="margin: 0;">&copy; Copyright Task Forge By Sankar</p>
-                </div>
+       <body
+        style="font-family: sans-serif; margin: 0; padding: 0; background-color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <div style="width: 100vw;">
+            <div style="background-color: #F6F7F8;text-align:center;">
+                <div><img src=${process.env.MAIL_LOGO} alt="Company Logo" style="width: 200px; height: 60px; object-fit: cover "></div>
+                <div><img src=${mailImage} alt="Company Logo" style="width: auto; height: 300px; object-fit: cover"></div>
             </div>
-              </div>
+            <div style="padding: 10px; background-color: #F6F7F8; text-align: center;">
+                <p
+                    style="margin-bottom: 10px; font-size: 24px; line-height: 1.6;text-align: center;font-weight: 600;color: #099F4E;">
+                    Hello, ${to.split('@')[0]}</p>
+                <p style="font-size: 14px; line-height: 1.5;">${body}</p>
+            </div>
+            <footer style="text-align: center; padding: 10px; background-color: #E6F7E9; color: #333;">
+                <p
+                    style="margin-bottom: 5px; font-size: 18px; line-height: 1.6;text-align: center;font-weight: 600;color: #099F4E;">
+                    Happy Task Managing !</p>
+                <p style="margin: 20px 0 5px 0;font-size: 14px;">Lots of Love from</p>
+                <div><img src=${process.env.MAIL_LOGO}  alt="Company Logo"
+                        style="width: 200px; height: 60px; object-fit: cover "></div>
+                <p style="font-size: 14px;">You are receiving this mail since you have become a part <br /> of our Task
+                    Forge Family.</p>
+            </footer>
+        </div>
+        </body>
+          
        `,
     };
 
@@ -39,7 +54,7 @@ const send_mail = async (to, subject, body, ...args) => {
       if (error) {
         console.log(error, "Internal Server Error");
       } else {
-        if (args.length>0 && args[0]['otp']!==undefined) {
+        if (args.length > 0 && args[0]['otp'] !== undefined) {
           const userFind = await Userverify.findOne({ email: to });
           const otpToken = await signEmailOTpToken({ otp: args[0]['otp']?.toString() });
           if (userFind) {
@@ -51,7 +66,7 @@ const send_mail = async (to, subject, body, ...args) => {
             await Userverify.create({ email: to, verifyToken: otpToken });
           }
         }
-       
+
         console.log("Email sent successfully");
       }
     });

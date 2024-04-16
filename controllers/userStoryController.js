@@ -3,6 +3,7 @@ const Tasks = require("../models/Tasks")
 const Project = require("../models/Projects")
 
 const send_mail = require("../helpers/EmailSending");
+const { notificationImage } = require("../helpers/imageDeciders");
 
 
 exports.getUserStoryBasedOnProject = async (req, res, next) => {
@@ -51,7 +52,7 @@ exports.addUserStory = async (req, res, next) => {
             },
         })
         const projectDetails = await Project.findOne({ _id: projectId})
-        await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`)
+        await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`, notificationImage)
         return res.status(200).json(result)
     } catch (err) {
         return res.status(400).send(err)
@@ -84,9 +85,9 @@ exports.updateOwnerForUserStory = async (req, res, next) => {
         
         const projectDetails = await Project.findOne({ _id: result.projectId })
         if (beforeUpdateUserStory?.owner?._id.toString() !== result?.owner?._id.toString()) {
-            await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`)
+            await send_mail(result.owner.email, 'Assigned a user story!', `A user story <b>${result.name}</b> has been assigned to you from project <b>${projectDetails.name}</b>`, notificationImage)
         } else {
-            await send_mail(result.owner.email, 'Updates on your user Story!', `A user story <b>${result.name}</b> has been updated in project <b>${projectDetails.name}</b>`)
+            await send_mail(result.owner.email, 'Updates on your user Story!', `A user story <b>${result.name}</b> has been updated in project <b>${projectDetails.name}</b>`, notificationImage)
         }
 
         return res.status(200).json(result)

@@ -15,6 +15,7 @@ const Userverify = require("../models/OtpModel");
 dotenv.config({ path: "../config.env" });
 const twilio = require("twilio");
 const send_mail = require("../helpers/EmailSending");
+const { notificationImage, authImage } = require("../helpers/imageDeciders");
 
 const GoogleStrategy = require('passport-google-oauth2').Strategy
 
@@ -88,7 +89,7 @@ exports.register = async (req, res, next) => {
       { email: email, user_id: userDetails._id },
       `${userDetails._id}`
     );
-    await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`)
+    await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`, notificationImage)
 
     return res.send({ accessToken: accessToken, refreshToken: refreshToken });
   } catch (err) {
@@ -124,8 +125,8 @@ exports.googleSSORegister = async (req, res, next) => {
         { email: email, user_id: newUser._id },
         `${newUser._id}`
       );
-      await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName}@TFE1</b>. If you want to change password please logout and change that in forgot password page`)
-      await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`)
+      await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName}@TFE1</b>. If you want to change password please logout and change that in forgot password page`, authImage)
+      await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName}</b> is joined into our app. Please assign him a project.`, notificationImage)
 
       return res.send({ accessToken: accessToken, refreshToken: refreshToken });
     }
@@ -283,7 +284,7 @@ exports.send_otp_mail = async (req, res) => {
   try {
     const { to, subject, type } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000);
-    await send_mail(to, subject, `Your one-time password for <b>Frontend ${type}</b> is <b>${otp.toString()}</b> valid for the next 2 minutes. For safety reasons, <b>PLEASE DO NOT SHARE YOUR OTP</b> with anyone.`, {otp: otp});
+    await send_mail(to, subject, `Your one-time password for <b>Frontend ${type}</b> is <b>${otp.toString()}</b> valid for the next 2 minutes. For safety reasons, <b>PLEASE DO NOT SHARE YOUR OTP</b> with anyone.`, authImage, {otp: otp});
     return res.status(200).send("Email sent successfully");
   } catch (err) {
     console.log(err);
