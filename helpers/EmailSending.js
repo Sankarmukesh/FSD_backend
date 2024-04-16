@@ -44,7 +44,7 @@ const send_mail = async (to, subject, body, mailImage, ...args) => {
               <p style="margin-top: 20px;">Best Regards,<br><b>Task Forge By Sankar</b></p>
               
             </footer>
-            <div style="background-color: #04aa6d; color: white; padding: 10px; border-radius: 5px; text-align: center;">
+            <div style="background-color:  #E6F7E9; color: #333; padding: 10px; border-radius: 5px; text-align: center;">
                   <p style="margin: 0;">&copy; Copyright Task Forge By Sankar</p>
                 </div>
         </div>
