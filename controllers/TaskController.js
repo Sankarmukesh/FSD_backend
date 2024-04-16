@@ -47,6 +47,7 @@ exports.addTask = async (req, res, next) => {
         await send_mail(fetchingNewTask.owner.email, `Assigned a ${type} for you!`, `A ${type} <b>${fetchingNewTask.name}</b> has been assigned to you from project <b>${projectDetails.name}</b> and userStory <b>${userStorydetails.name}</b>`, notificationImage)
         return res.status(200).json(fetchingNewTask)
     } catch (err) {
+        console.log(err);
         return res.status(400).send(err)
 
     }

@@ -4,7 +4,7 @@ const tasksSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            unique: true,
+            unique: false,
         },
         type: {
             type: String,
