@@ -40,9 +40,13 @@ const send_mail = async (to, subject, body, mailImage, ...args) => {
                 <p style="margin: 20px 0 5px 0;font-size: 14px;">Lots of Love from</p>
                 <div><img src=${process.env.MAIL_LOGO}  alt="Company Logo"
                         style="width: 200px; height: 60px; object-fit: cover "></div>
-                <p style="font-size: 14px;">You are receiving this mail since you have become a part <br /> of our Task
-                    Forge Family.</p>
+                    <a href = ${process.env.FRONTEND_SITE} style="display: inline-block; padding: 10px 20px; background-color: #04aa6d; color: #fff; text-decoration: none; border-radius: 5px;">Go to Task Forge</a>       
+              <p style="margin-top: 20px;">Best Regards,<br><b>Task Forge By Sankar</b></p>
+              
             </footer>
+            <div style="background-color: #04aa6d; color: white; padding: 10px; border-radius: 5px; text-align: center;">
+                  <p style="margin: 0;">&copy; Copyright Task Forge By Sankar</p>
+                </div>
         </div>
         </body>
           
