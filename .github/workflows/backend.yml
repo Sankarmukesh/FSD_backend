@@ -14,16 +14,16 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
       - name: Build Docker Image
-        run: docker build -t fsd_backend  .
+        run: docker build -t sankar712/fsd_backend  .
       - name: Publish Image to docker hub
-        run: docker push fsd_backend:latest 
+        run: docker push sankar712/fsd_backend:latest 
  
   deploy:
           needs: build
           runs-on: self-hosted 
           steps:
             - name: Pull image from docker hub
-              run: docker pull fsd_backend:latest 
+              run: docker pull sankar712/fsd_backend:latest 
             - name: Delete old container
               run: docker rm -f fsd-backend-container  
             - name: Run Docker Container
@@ -46,5 +46,5 @@ jobs:
                    -e MONGODB_URI='${{ secrets.MONGODB_URI }}' \
                    -e DOCKER_USERNAME='${{ secrets.DOCKER_USERNAME }}' \
                    -e DOCKER_PASSWORD='${{ secrets.DOCKER_PASSWORD }}' \
-                   fsd_backend
+                   sankar712/fsd_backend
         
