@@ -115,7 +115,7 @@ exports.googleSSORegister = async (req, res, next) => {
         email, role,
         password: passwordHashing,
         phone: '',
-        userName,
+        userName: userName.split('.').join('_'),
       });
       const accessToken = await signAccessToken(
         { email: email, user_id: newUser._id },
