@@ -125,7 +125,7 @@ exports.googleSSORegister = async (req, res, next) => {
         { email: email, user_id: newUser._id },
         `${newUser._id}`
       );
-      await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName.split('.').join('_')}@TFE1</b>. If you want to change password please logout and change that in forgot password page`, authImage)
+      await send_mail(email, 'Task Forge System generated password for you', `Your temporary password is <b>${userName.split('.').join('_')}@TFE1</b> If you want to change password please logout and change that in forgot password page`, authImage)
       await send_mail(process.env.ADMIN_EMAIL, 'New User joined!', `A new user <b>${userName.split('.').join('_')}</b> is joined into our app. Please assign him a project.`, notificationImage)
 
       return res.send({ accessToken: accessToken, refreshToken: refreshToken });
