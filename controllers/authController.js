@@ -108,7 +108,7 @@ exports.googleSSORegister = async (req, res, next) => {
       // hashing password
       const salt = await bcrypt.genSalt(10);
       const passwordHashing = await bcrypt.hash(
-        `${userName}@TFE1`,
+        `${userName.split('.').join('_')}@TFE1`,
         salt
       );
       const newUser = await User.create({
